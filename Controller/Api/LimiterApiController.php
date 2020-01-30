@@ -15,6 +15,7 @@ use FOS\RestBundle\Util\Codes;
 use Mautic\ApiBundle\Controller\CommonApiController;
 use Mautic\CoreBundle\Helper\ArrayHelper;
 use MauticPlugin\MauticExtendEmailFieldsBundle\Model\ExtendEmailFieldsModel;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 
 class LimiterApiController extends CommonApiController
@@ -25,11 +26,18 @@ class LimiterApiController extends CommonApiController
     private $configurator;
 
     /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
      * @param FilterControllerEvent $event
      */
     public function initialize(FilterControllerEvent $event)
     {
         $this->configurator = $this->get('mautic.configurator');
+        $this->filesystem = $this->get('symfony.filesystem');
+
     }
 
 
@@ -122,8 +130,8 @@ class LimiterApiController extends CommonApiController
         $limiter[$key] = $value;
         $toUpdate      = ['limiter' => $limiter];
         $this->configurator->mergeParameters($toUpdate);
-
         $this->configurator->write();
+        $this->filesystem->remove($this->coreParametersHelper->getParameter('kernel.cache_dir'));
         $view = $this->view(['success' => '1'], Codes::HTTP_OK);
 
         return $this->handleView($view);
