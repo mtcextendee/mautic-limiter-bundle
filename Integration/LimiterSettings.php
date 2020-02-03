@@ -11,7 +11,6 @@ namespace MauticPlugin\MauticLimiterBundle\Integration;
 use Doctrine\DBAL\Connection;
 use Mautic\CoreBundle\Helper\ArrayHelper;
 use Mautic\CoreBundle\Helper\CoreParametersHelper;
-use Mautic\PluginBundle\Helper\IntegrationHelper;
 
 class LimiterSettings
 {

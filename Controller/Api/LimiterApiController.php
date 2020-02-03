@@ -14,7 +14,6 @@ namespace MauticPlugin\MauticLimiterBundle\Controller\Api;
 use FOS\RestBundle\Util\Codes;
 use Mautic\ApiBundle\Controller\CommonApiController;
 use Mautic\CoreBundle\Helper\ArrayHelper;
-use MauticPlugin\MauticExtendEmailFieldsBundle\Model\ExtendEmailFieldsModel;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 
