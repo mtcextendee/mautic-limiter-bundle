@@ -1,6 +1,6 @@
 # Limiter for Mautic
 
-This plugin disable Mautic featurese after extend limit of number of identified contacts. You can hide create new contact, new email, campaigns or editation too.
+This plugin disable Mautic features after extend limit of number of identified contacts. You can hide create new contact, new email, campaigns or editation too.
 
 ## Installation
 
@@ -46,6 +46,13 @@ Configure Limiter from config (app/config/local.php)
 ```
 
 Every change require clear cache (app/cache/prod/)
+
+#### Tokens
+
+You can use in message these tokens
+
+- {numberOfContacts}
+- {actualLimit}
 
 ## API
 

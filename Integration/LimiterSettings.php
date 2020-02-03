@@ -45,6 +45,11 @@ class LimiterSettings
     private $style;
 
     /**
+     * @var bool|int
+     */
+    private $numberOfContacts;
+
+    /**
      * LimiterSettings constructor.
      *
      * @param CoreParametersHelper $coreParametersHelper
@@ -55,7 +60,7 @@ class LimiterSettings
         $limiter          = $coreParametersHelper->getParameter('limiter', []);
         $this->limit      = (int) ArrayHelper::getValue('limit', $limiter, 0);
         $this->message    = (string) ArrayHelper::getValue('message', $limiter, '');
-        $this->style    = (string) ArrayHelper::getValue('style', $limiter, '');
+        $this->style      = (string) ArrayHelper::getValue('style', $limiter, '');
         $this->routers    = (array) ArrayHelper::getValue('routes', $limiter, []);
         $this->enabled    = $this->limit > 0 ? true : false;
         $this->connection = $connection;
@@ -90,7 +95,8 @@ class LimiterSettings
      */
     public function getMessage(): string
     {
-        return $this->message;
+        return str_replace(['{numberOfContacts}', '{actualLimit}'], [$this->getNumberOfContacts(), $this->limit], $this->message);
+
     }
 
     /**
@@ -104,19 +110,30 @@ class LimiterSettings
     public function isLimitedAccount()
     {
         if ($this->enabled && $this->limit > 0) {
-            $qb = $this->connection->createQueryBuilder();
 
-            $contacts = $qb->select('count(l.id)')
-                ->from(MAUTIC_TABLE_PREFIX.'leads', 'l')
-                ->where($qb->expr()->isNotNull('l.date_identified'))
-                ->execute()
-                ->fetchColumn();
+            $contacts = $this->getNumberOfContacts();
             if ($contacts > $this->limit) {
                 return true;
             }
         }
 
         return false;
+    }
+
+    /**
+     * @return bool|int
+     */
+    public function getNumberOfContacts()
+    {
+        if ($this->numberOfContacts === null) {
+            $qb                     = $this->connection->createQueryBuilder();
+            $this->numberOfContacts = (int) $qb->select('count(l.id)')
+                ->from(MAUTIC_TABLE_PREFIX.'leads', 'l')
+                ->where($qb->expr()->isNotNull('l.date_identified'))
+                ->execute()
+                ->fetchColumn();
+        }
+        return $this->numberOfContacts;
     }
 
 }

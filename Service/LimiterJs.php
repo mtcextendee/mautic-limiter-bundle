@@ -100,8 +100,7 @@ JS;
         if (position > -1) {
             mQuery('.modal').hide().prev().hide();
             mQuery('.page-header .btn-group').remove()
-    mQuery('form .box-layout').html('<div class="row"><div class="alert alert-warning alert-limiter-custom col-md-6 col-md-offset-3 mt-md" style="white-space: normal;"><p>{$this->limiterSettings->getMessage(
-        )}</p></div></div>');
+    mQuery('form .box-layout').html('<div class="row"><div class="alert alert-warning alert-limiter-custom col-md-6 col-md-offset-3 mt-md" style="white-space: normal;"><p>{$this->limiterSettings->getMessage()}</p></div></div>');
        };
         }
         
