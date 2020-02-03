@@ -48,4 +48,12 @@ class Limiter
             return $this->limiterJs->generate($routes);
         }
     }
+
+    /**
+     * @return string
+     */
+    public function getCss()
+    {
+        return $this->limiterSettings->getStyle();
+    }
 }

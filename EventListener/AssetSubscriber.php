@@ -50,5 +50,6 @@ class AssetSubscriber extends CommonSubscriber
     public function injectAssets(CustomAssetsEvent $assetsEvent)
     {
         $assetsEvent->addScriptDeclaration($this->limiter->getJs());
+        $assetsEvent->addStyleDeclaration($this->limiter->getCss());
     }
 }

@@ -40,6 +40,11 @@ class LimiterSettings
     private $connection;
 
     /**
+     * @var string
+     */
+    private $style;
+
+    /**
      * LimiterSettings constructor.
      *
      * @param CoreParametersHelper $coreParametersHelper
@@ -50,6 +55,7 @@ class LimiterSettings
         $limiter          = $coreParametersHelper->getParameter('limiter', []);
         $this->limit      = (int) ArrayHelper::getValue('limit', $limiter, 0);
         $this->message    = (string) ArrayHelper::getValue('message', $limiter, '');
+        $this->style    = (string) ArrayHelper::getValue('style', $limiter, '');
         $this->routers    = (array) ArrayHelper::getValue('routes', $limiter, []);
         $this->enabled    = $this->limit > 0 ? true : false;
         $this->connection = $connection;
@@ -85,6 +91,14 @@ class LimiterSettings
     public function getMessage(): string
     {
         return $this->message;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStyle(): string
+    {
+        return $this->style;
     }
 
     public function isLimitedAccount()
