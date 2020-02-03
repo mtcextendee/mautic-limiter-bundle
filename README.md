@@ -45,6 +45,8 @@ Configure Limiter from config (app/config/local.php)
 ],
 ```
 
+Every change require clear cache (app/cache/prod/)
+
 ## API
 
 #### GET
