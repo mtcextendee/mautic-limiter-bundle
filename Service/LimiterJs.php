@@ -46,41 +46,43 @@ class LimiterJs
     public function generate($routes)
     {
         $js = '';
-        $header = $this->generateHeader();
-        foreach ($routes as $name => $parameters) {
-            $route   = $this->router->generate($name, $parameters);
-            $actions = explode('_', $name);
-            if (isset($actions[1])) {
-                $js.= $this->generateJs($actions[1], $route);
-            }
+
+        foreach ($routes as $section => $route) {
+            $js .= $this->generateJs($section, $route);
         }
 
         if ($js) {
-            return $header.$js;
+            return $this->generateHeader().$js;
         }
 
     }
 
 
     /**
-     * @param $action
+     * @param $section
      * @param $route
      *
      * @return string
      */
-    private function generateJs($action, $route)
+    private function generateJs($section, $route)
     {
-        $action = str_replace(['contact'], ['lead'], $action);
-        $actionOnLoad       = $action.'OnLoad';
+        $section            = str_replace(['contact'], ['lead'], $section);
+        $actionOnLoad       = $section.'OnLoad';
         $actionOnLoadBackup = $actionOnLoad.'Backup';
 
         $js = <<<JS
             Mautic.{$actionOnLoadBackup}= Mautic.{$actionOnLoad};
 Mautic.{$actionOnLoad} = function(container, response){
     Mautic.{$actionOnLoadBackup}(container, response);
-    Mautic.generateLimiterMesssage('{$route}');   
-    };
 JS;
+        foreach ($route as $rout) {
+            $js .= <<<JS
+    
+    Mautic.generateLimiterMesssage('{$rout}');   
+JS;
+        }
+        $js .= '}
+        ';
 
         return $js;
 
@@ -91,16 +93,26 @@ JS;
      */
     private function generateHeader()
     {
+
         $js = <<<JS
-        Mautic.generateLimiterMesssage = function (route) {
+        
+        Mautic.matchRuleShort =  function (str, rule) {
+          var escapeRegex = (str) => str.replace(/([.*+?^=!:$()|\[\]\/\\\\])/g, "\\\\$1");
+          return new RegExp("^" + rule.split("*").map(escapeRegex).join(".*") + "$").test(str);
+        }
+        
+        Mautic.generateLimiterMesssage = function (rule) {
           var str = location.href;
           console.log(str);
-          console.log(route);
-        var position = str.search(route);
-        if (position > -1) {
+          console.log(rule);
+        var position = Mautic.matchRuleShort(str,  rule);
+        console.log(position);
+        if (position === true) {
             mQuery('.modal').hide().prev().hide();
             mQuery('.page-header .btn-group').remove()
-    mQuery('form .box-layout').html('<div class="row"><div class="alert alert-warning alert-limiter-custom col-md-6 col-md-offset-3 mt-md" style="white-space: normal;"><p>{$this->limiterSettings->getMessage()}</p></div></div>');
+            mQuery('.content-body .panel-body, .content-body .page-list').remove()
+    mQuery('form .box-layout,.content-body .panel').html('<div class="row"><div class="alert alert-warning alert-limiter-custom col-md-6 col-md-offset-3 mt-md" style="white-space: normal;"><p>{$this->limiterSettings->getMessage(
+        )}</p></div></div>');
        };
         }
         

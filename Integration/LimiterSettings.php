@@ -95,7 +95,11 @@ class LimiterSettings
      */
     public function getMessage(): string
     {
-        return str_replace(['{numberOfContacts}', '{actualLimit}'], [$this->getNumberOfContacts(), $this->limit], $this->message);
+        return str_replace(
+            ['{numberOfContacts}', '{actualLimit}'],
+            [$this->getNumberOfContacts(), $this->limit],
+            $this->message
+        );
 
     }
 

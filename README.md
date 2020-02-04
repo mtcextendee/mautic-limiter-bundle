@@ -20,14 +20,15 @@ Configure Limiter from config (app/config/local.php)
     'limit'   => 5000, 
     'message' => 'Your message. <a href="bttps://mtcextendee.com/contact">contact us</a>',
     'routes'  => [
-        'mautic_campaign_action' => [
-            'objectAction' => 'new',
+        'campaign' => [
+            '*campaign/new',
+            '*campaign/edit/*',
         ],
-        'mautic_email_action' => [
-            'objectAction' => 'new',
+        'email' => [
+            '*campaign/new',
         ],
-        'mautic_contact_action' => [
-            'objectAction' => 'new',
+        'contact' => [
+            '*contacts/new'
         ],
     ],
 ]
@@ -37,13 +38,7 @@ Configure Limiter from config (app/config/local.php)
 
 - limit = number for identified contacts to stop (0 means unlimited)
 - message - your message (allow HTML)
-- routes - array of routes defined in Mautic configuration.  You can use also 
-
-```php
-'mautic_campaign_action' => [
-    'objectAction' => 'edit',
-],
-```
+- routes - array of url routes with wildcard
 
 Every change require clear cache (app/cache/prod/)
 
