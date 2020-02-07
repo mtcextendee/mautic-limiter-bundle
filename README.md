@@ -36,7 +36,7 @@ Configure Limiter from config (app/config/local.php)
 - routes - array of url routes with wildcard
 - style - css style for alert message (class .alert-limiter-custom)
 
-Every change require clear cache (app/cache/prod/)
+**Every change require clear cache (app/cache/prod/)**  
 
 #### Tokens
 
