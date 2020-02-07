@@ -28,6 +28,11 @@ return [
                 'controller' => 'MauticLimiterBundle:Api\LimiterApi:getRoutes',
                 'method'     => 'GET',
             ],
+            'mautic_limiter_api_get_style' => [
+                'path'       => '/limiter/style/get',
+                'controller' => 'MauticLimiterBundle:Api\LimiterApi:getStyle',
+                'method'     => 'GET',
+            ],
             'mautic_limiter_api_update_message' => [
                 'path'       => '/limiter/message/update',
                 'controller' => 'MauticLimiterBundle:Api\LimiterApi:updateMessage',
@@ -43,6 +48,12 @@ return [
             'mautic_limiter_api_update_routes' => [
                 'path'       => '/limiter/routes/update',
                 'controller' => 'MauticLimiterBundle:Api\LimiterApi:updateRoutes',
+                'method'     => 'POST',
+            ],
+
+            'mautic_limiter_api_update_style' => [
+                'path'       => '/limiter/style/update',
+                'controller' => 'MauticLimiterBundle:Api\LimiterApi:updateStyle',
                 'method'     => 'POST',
             ],
         ],

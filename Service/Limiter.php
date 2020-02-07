@@ -43,9 +43,7 @@ class Limiter
     public function getJs()
     {
         if ($this->limiterSettings->isLimitedAccount()) {
-            $routes = $this->limiterSettings->getRoutes();
-
-            return $this->limiterJs->generate($routes);
+            return $this->limiterJs->generate();
         }
     }
 

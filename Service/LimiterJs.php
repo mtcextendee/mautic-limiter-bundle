@@ -43,17 +43,19 @@ class LimiterJs
      *
      * @return string
      */
-    public function generate($routes)
+    public function generate()
     {
-        $js = '';
-
-        foreach ($routes as $section => $route) {
-            $js .= $this->generateJs($section, $route);
-        }
-
-        if ($js) {
-            return $this->generateHeader().$js;
-        }
+        $routes = $this->limiterSettings->getRoutes();
+        $js     = <<<JS
+            Mautic.generateLimiter = function(){
+            {$this->generateJs($routes)}
+            }
+            setTimeout(function () {
+            Mautic.generateLimiter();
+        }, 50);
+            
+JS;
+        return $this->generateHeader().$js;
 
     }
 
@@ -64,25 +66,14 @@ class LimiterJs
      *
      * @return string
      */
-    private function generateJs($section, $route)
+    private function generateJs($routes)
     {
-        $section            = str_replace(['contact'], ['lead'], $section);
-        $actionOnLoad       = $section.'OnLoad';
-        $actionOnLoadBackup = $actionOnLoad.'Backup';
-
-        $js = <<<JS
-            Mautic.{$actionOnLoadBackup}= Mautic.{$actionOnLoad};
-Mautic.{$actionOnLoad} = function(container, response){
-    Mautic.{$actionOnLoadBackup}(container, response);
-JS;
-        foreach ($route as $rout) {
+        $js = '';
+        foreach ($routes as $route) {
             $js .= <<<JS
-    
-    Mautic.generateLimiterMesssage('{$rout}');   
+    Mautic.generateLimiterMesssage('{$route}');   
 JS;
         }
-        $js .= '}
-        ';
 
         return $js;
 
@@ -95,7 +86,11 @@ JS;
     {
 
         $js = <<<JS
-        
+        Mautic.generatePageTitleBackup = Mautic.generatePageTitle;
+        Mautic.generatePageTitle = function(route){
+            Mautic.generatePageTitleBackup(route);
+            Mautic.generateLimiter();
+        }
         Mautic.matchRuleShort =  function (str, rule) {
           var escapeRegex = (str) => str.replace(/([.*+?^=!:$()|\[\]\/\\\\])/g, "\\\\$1");
           return new RegExp("^" + rule.split("*").map(escapeRegex).join(".*") + "$").test(str);

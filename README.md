@@ -18,19 +18,14 @@ Configure Limiter from config (app/config/local.php)
 ```php
 'limiter'                               => [
     'limit'   => 5000, 
-    'message' => 'Your message. <a href="bttps://mtcextendee.com/contact">contact us</a>',
     'routes'  => [
-        'campaign' => [
-            '*campaign/new',
-            '*campaign/edit/*',
-        ],
-        'email' => [
-            '*campaign/new',
-        ],
-        'contact' => [
-            '*contacts/new'
-        ],
+         '*campaigns/new',
+         '*campaigns',
+         '*contacts/new',
+         '*contacts/edit/*',
     ],
+    'message' => 'Your message. <a href="bttps://mtcextendee.com/contact">contact us</a>',
+    'style'=>'.alert-limiter-custom { background:red; color:#fff; }',
 ]
 ```
 
@@ -39,6 +34,7 @@ Configure Limiter from config (app/config/local.php)
 - limit = number for identified contacts to stop (0 means unlimited)
 - message - your message (allow HTML)
 - routes - array of url routes with wildcard
+- style - css style for alert message (class .alert-limiter-custom)
 
 Every change require clear cache (app/cache/prod/)
 
@@ -59,6 +55,7 @@ $response = $api->makeRequest('limiter/get'); // get all settings
 $response = $api->makeRequest('limiter/message/get'); // get message setting
 $response = $api->makeRequest('limiter/limit/get'); // get limit setting
 $response = $api->makeRequest('limiter/routes/get'); // get routes setting
+$response = $api->makeRequest('limiter/routes/style'); // get style setting
 ```
 
 Response
@@ -77,6 +74,13 @@ $response = $api->makeRequest(
     'limiter/message/update',
     [
         'limit' => 'My custom message'
+    ],
+    'POST'
+);
+$response = $api->makeRequest(
+    'limiter/style/update',
+    [
+        'style' => 'My custom message'
     ],
     'POST'
 );

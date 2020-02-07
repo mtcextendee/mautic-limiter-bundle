@@ -64,6 +64,15 @@ class LimiterApiController extends CommonApiController
         return $this->getViewFromLimiter('routes');
     }
 
+
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function getStyleAction()
+    {
+        return $this->getViewFromLimiter('style');
+    }
+
     /**
      * @param $key
      *
@@ -111,6 +120,15 @@ class LimiterApiController extends CommonApiController
     {
         return $this->processUpdate('routes');
     }
+
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function updateStyleAction()
+    {
+        return $this->processUpdate('style');
+    }
+
     /**
      * @param $key
      *
