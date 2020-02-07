@@ -24,7 +24,7 @@ Configure Limiter from config (app/config/local.php)
          '*contacts/new',
          '*contacts/edit/*',
     ],
-    'message' => 'Your message. <a href="bttps://mtcextendee.com/contact">contact us</a>',
+ 'message' => '<h3>Contacts limit: {numberOfContacts}/{actualLimit}</h3><p>You have reached the limit  of contacts. <a href="bttps://mtcextendee.com/contact"><strong>contact support</strong></a></p>',
     'style'=>'.alert-limiter-custom { background:red; color:#fff; }',
 ]
 ```

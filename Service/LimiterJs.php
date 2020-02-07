@@ -52,7 +52,7 @@ class LimiterJs
             }
             setTimeout(function () {
             Mautic.generateLimiter();
-        }, 50);
+        }, 150);
             
 JS;
         return $this->generateHeader().$js;
