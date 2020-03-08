@@ -19,6 +19,7 @@ use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 
 class LimiterApiController extends CommonApiController
 {
+    CONST API_SECRET_KEY = 'api_secret_key';
     /**
      * @var \Mautic\CoreBundle\Configurator\Configurator $configurator
      */
@@ -92,6 +93,9 @@ class LimiterApiController extends CommonApiController
     public function getAction()
     {
         $limiter = $this->coreParametersHelper->getParameter('limiter');
+        if (isset($limiter[self::API_SECRET_KEY])) {
+            unset($limiter[self::API_SECRET_KEY]);
+        }
         $view    = $this->view(['response' => $limiter], Codes::HTTP_OK);
 
         return $this->handleView($view);
@@ -139,11 +143,34 @@ class LimiterApiController extends CommonApiController
         $all   = $this->request->request->all();
         $value = ArrayHelper::getValue($key, $all);
         if ($value === null) {
-            $view = $this->view(['error' => sprintf("Parameter %s not found", $key)], Codes::HTTP_OK);;
+            $view = $this->view(['error' => sprintf("Parameter %s not found", $key)], Codes::HTTP_BAD_REQUEST);;
 
             return $this->handleView($view);
         }
         $limiter       = $this->coreParametersHelper->getParameter('limiter');
+
+        $apiSecretKeyFromRequest = ArrayHelper::getValue(self::API_SECRET_KEY, $all);
+        if (is_null($apiSecretKeyFromRequest)) {
+            $view = $this->view(['error' => "Request parameter '".self::API_SECRET_KEY."' not found. This parameter it's required"], Codes::HTTP_BAD_REQUEST);
+
+            return $this->handleView($view);
+        }
+
+        $apiSecretKey = ArrayHelper::getValue(self::API_SECRET_KEY, $limiter);
+        if (is_null($apiSecretKey)) {
+            $view = $this->view(['error' => "Configuration parameter '".self::API_SECRET_KEY."' not found. This parameter restrict API access and it's required"], Codes::HTTP_BAD_REQUEST);
+
+            return $this->handleView($view);
+        }
+
+        if ($apiSecretKey !== $apiSecretKeyFromRequest) {
+            $view = $this->view(['error' => self::API_SECRET_KEY." parameter ".$apiSecretKeyFromRequest." is not valid."], Codes::HTTP_BAD_REQUEST);
+
+            return $this->handleView($view);
+        }
+
+
+
         $limiter[$key] = $value;
         $toUpdate      = ['limiter' => $limiter];
         $this->configurator->mergeParameters($toUpdate);

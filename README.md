@@ -24,8 +24,9 @@ Configure Limiter from config (app/config/local.php)
          '*contacts/new',
          '*contacts/edit/*',
     ],
- 'message' => '<h3>Contacts limit: {numberOfContacts}/{actualLimit}</h3><p>You have reached the limit  of contacts. <a href="bttps://mtcextendee.com/contact"><strong>contact support</strong></a></p>',
+    'message' => '<h3>Contacts limit: {numberOfContacts}/{actualLimit}</h3><p>You have reached the limit  of contacts. <a href="bttps://mtcextendee.com/contact"><strong>contact support</strong></a></p>',
     'style'=>'.alert-limiter-custom { background:red; color:#fff; }',
+    'api_secret_key' => 'some hash'
 ]
 ```
 
@@ -35,6 +36,7 @@ Configure Limiter from config (app/config/local.php)
 - message - your message (allow HTML)
 - routes - array of url routes with wildcard
 - style - css style for alert message (class .alert-limiter-custom)
+- api_secret_key - add API secret key If you want use API. This key would be validate from request
 
 **Every change require clear cache (app/cache/prod/)**  
 
@@ -73,21 +75,24 @@ $api = new \Mautic\Api\Api($auth, $apiUrl);
 $response = $api->makeRequest(
     'limiter/message/update',
     [
-        'limit' => 'My custom message'
+        'message' => 'My custom message',
+        'api_secret_key' => 'somehash'
     ],
     'POST'
 );
 $response = $api->makeRequest(
     'limiter/style/update',
     [
-        'style' => 'My custom message'
+        'style' => '.alert-limiter-custom { background:red } ',
+        'api_secret_key' => 'somehash'
     ],
     'POST'
 );
 $response = $api->makeRequest(
     'limiter/limit/update',
     [
-        'limit' => 1000
+        'limit' => 1000,
+        'api_secret_key' => 'somehash'
     ],
     'POST'
 );
@@ -95,10 +100,11 @@ $response = $api->makeRequest(
     'limiter/routes/update',
     [
         'routes' => [
-            'mautic_campaign_action' => [
-                'objectAction' => 'new',
-            ],
+           		'*contacts/new',
+           		'*contacts/edit*',
+           		'*campaigns/edit*'
         ],
+        'api_secret_key' => 'somehash'
     ],
     'POST'
 );
