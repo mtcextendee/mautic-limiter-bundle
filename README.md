@@ -122,8 +122,7 @@ Array
 
 ## More Mautic stuff
 
-- Plugins from Mautic Extendee Family  https://mtcextendee.com/plugins
-- Mautic themes https://mtcextendee.com/themes
+- https://mtcextendee.com/
 
 ### Credits
 
