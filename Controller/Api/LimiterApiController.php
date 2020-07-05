@@ -81,7 +81,7 @@ class LimiterApiController extends CommonApiController
      */
     private function getViewFromLimiter($key)
     {
-        $limiter = $this->coreParametersHelper->getParameter('limiter');
+        $limiter = $this->coreParametersHelper->get('limiter');
         $view    = $this->view(['response' => ArrayHelper::getValue($key, $limiter)]);
 
         return $this->handleView($view);
@@ -92,7 +92,7 @@ class LimiterApiController extends CommonApiController
      */
     public function getAction()
     {
-        $limiter = $this->coreParametersHelper->getParameter('limiter');
+        $limiter = $this->coreParametersHelper->get('limiter');
         if (isset($limiter[self::API_SECRET_KEY])) {
             unset($limiter[self::API_SECRET_KEY]);
         }
@@ -147,7 +147,7 @@ class LimiterApiController extends CommonApiController
 
             return $this->handleView($view);
         }
-        $limiter       = $this->coreParametersHelper->getParameter('limiter');
+        $limiter       = $this->coreParametersHelper->get('limiter');
 
         $apiSecretKeyFromRequest = ArrayHelper::getValue(self::API_SECRET_KEY, $all);
         if (is_null($apiSecretKeyFromRequest)) {
@@ -175,7 +175,7 @@ class LimiterApiController extends CommonApiController
         $toUpdate      = ['limiter' => $limiter];
         $this->configurator->mergeParameters($toUpdate);
         $this->configurator->write();
-        $this->filesystem->remove($this->coreParametersHelper->getParameter('kernel.cache_dir'));
+        $this->filesystem->remove($this->coreParametersHelper->get('kernel.cache_dir'));
         $view = $this->view(['success' => '1'], Codes::HTTP_OK);
 
         return $this->handleView($view);

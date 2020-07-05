@@ -57,7 +57,7 @@ class LimiterSettings
      */
     public function __construct(CoreParametersHelper $coreParametersHelper, Connection $connection)
     {
-        $limiter          = $coreParametersHelper->getParameter('limiter', []);
+        $limiter          = $coreParametersHelper->get('limiter', []);
         $this->limit      = (int) ArrayHelper::getValue('limit', $limiter, 0);
         $this->message    = (string) ArrayHelper::getValue('message', $limiter, '');
         $this->style      = (string) ArrayHelper::getValue('style', $limiter, '');
