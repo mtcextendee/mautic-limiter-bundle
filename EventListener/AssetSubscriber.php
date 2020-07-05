@@ -15,13 +15,10 @@ use Mautic\CoreBundle\CoreEvents;
 use Mautic\CoreBundle\Event\CustomAssetsEvent;
 use Mautic\CoreBundle\EventListener\CommonSubscriber;
 use MauticPlugin\MauticLimiterBundle\Service\Limiter;
-use MauticPlugin\MauticLimiterBundle\Service\LimiterJs;
-use MauticPlugin\MauticLimiterBundle\Integration\LimiterSettings;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class AssetSubscriber extends CommonSubscriber
+class AssetSubscriber implements EventSubscriberInterface
 {
-
-
     /**
      * @var Limiter
      */
