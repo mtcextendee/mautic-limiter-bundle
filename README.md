@@ -1,6 +1,6 @@
-# Limiter for Mautic 3
+# Limiter for Mautic 3 and Mautic 2
 
-_If you're interest Limiter for Mautic 2, please contact me._
+_Download link for Mautic 2 is included in the package in  **mautic2-version.md** file_.
 
 This plugin disable Mautic features after extend limit of number of identified contacts. You can hide create new contact, new email, campaigns or editation too.
 
