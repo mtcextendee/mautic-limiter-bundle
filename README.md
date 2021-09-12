@@ -1,4 +1,4 @@
-# Limiter for Mautic 3 and Mautic 2
+# Limiter for Mautic 4, Mautic 3 and Mautic 2
 
 This plugin works on Mautic 4 and Mautic 3 as well. Download link for Mautic 2 version is included in the package in `mautic2-version.md` file.
 
